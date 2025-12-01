@@ -1,0 +1,21 @@
+# User & Group Management
+
+## Create User
+sudo useradd devuser
+sudo passwd devuser
+
+## Create Group
+sudo groupadd devteam
+
+## Add User to Group
+sudo usermod -aG devteam devuser
+
+## Verify
+id devuser
+groups devuser
+
+## Delete User
+sudo userdel devuser
+
+## Delete Group
+sudo groupdel devteam
