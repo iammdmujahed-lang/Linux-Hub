@@ -1,19 +1,25 @@
-# Linux File Permissions & Ownership
+#!/usr/bin/env bash
+# set_devops_permissions.sh
+# Usage: sudo ./set_devops_permissions.sh [target-dir]
+# Default target: /opt/projects/app1
+set -euo pipefail
 
-## Change Owner
-sudo chown user:group file
+TARGET="${1:-/opt/projects/app1}"
+GROUP="devops_group"
+USER="devops_user"
 
-## Change Permissions
-chmod 755 file
-chmod -R 770 /opt/project
+echo "[INFO] Creating target dir: $TARGET"
+sudo mkdir -p "$TARGET"
 
-## Permission bits:
-r = read
-w = write
-x = execute
+echo "[INFO] Set owner root:$GROUP"
+sudo chown -R root:"$GROUP" "$TARGET"
 
-## Set SGID
-sudo chmod g+s /opt/project
+echo "[INFO] Set permissions to 2770 (rwx owner+group, SGID bit)"
+sudo chmod -R 2770 "$TARGET"
+sudo chmod g+s "$TARGET"
 
-## Set Sticky Bit
-sudo chmod +t /shared-folder
+echo "[INFO] Add user $USER to $GROUP (if not already)"
+sudo usermod -aG "$GROUP" "$USER" || true
+
+echo "[DONE] Permissions set. Verify:"
+ls -ld "$TARGET"
